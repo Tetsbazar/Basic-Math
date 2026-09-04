@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>যোগ (Addition) - Interactive Quiz</title>
+    <title>যোগ (Addition) - MCQ Quiz</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,6 +24,7 @@
             --shadow: 0 10px 30px rgba(0,0,0,0.1);
             --danger: #e74c3c;
             --success: #2ecc71;
+            --warning: #f39c12;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Hind Siliguri', sans-serif; }
@@ -49,7 +50,7 @@
             animation: fadeInDown 0.6s ease;
         }
 
-        .back-btn {
+        .nav-btn {
             background: var(--white);
             color: var(--primary-dark);
             padding: 10px 20px;
@@ -61,24 +62,16 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
         }
-        .back-btn:hover { transform: translateX(-5px); }
-
-        .home-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            backdrop-filter: blur(5px);
-            transition: 0.3s;
-        }
-        .home-btn:hover { background: rgba(255,255,255,0.4); }
+        .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .nav-btn.secondary { background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
+        .nav-btn.secondary:hover { background: rgba(255,255,255,0.4); }
 
         /* VIEW 1: Topic Menu */
         #topic-menu { animation: fadeInUp 0.6s ease; }
-        
         .menu-header { text-align: center; color: white; margin-bottom: 30px; }
         .menu-header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 2px 2px 8px rgba(0,0,0,0.2); }
         .menu-header p { font-size: 1.1rem; opacity: 0.95; }
@@ -101,9 +94,7 @@
             flex-direction: column;
             gap: 10px;
         }
-
-        .topic-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
-        
+        .topic-card:hover { transform: translateY(-8px) scale(1.02); }
         .topic-num { 
             background: var(--primary-light); color: var(--primary-dark); 
             width: 35px; height: 35px; border-radius: 50%; 
@@ -124,84 +115,118 @@
             border-radius: 16px;
             box-shadow: var(--shadow);
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
         }
-
-        .quiz-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); }
+        .quiz-header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
+        .quiz-title { font-size: 1.1rem; font-weight: 700; color: var(--primary-dark); }
         .quiz-progress { font-size: 0.95rem; color: var(--text-light); font-weight: 600; }
         
-        .progress-bar-bg {
-            width: 100%; height: 8px; background: #ecf0f1; border-radius: 10px; margin-top: 10px; overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%; background: var(--primary); width: 0%; transition: width 0.4s ease; border-radius: 10px;
-        }
+        .progress-bar-bg { width: 100%; height: 8px; background: #ecf0f1; border-radius: 10px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.4s ease; border-radius: 10px; }
 
         .quiz-card {
             background: var(--white);
             border-radius: 20px;
-            padding: 40px 30px;
+            padding: 30px 25px;
             box-shadow: var(--shadow);
             text-align: center;
-            min-height: 350px;
+            min-height: 400px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: space-between;
         }
 
         .q-number { 
             background: var(--primary); color: white; padding: 5px 15px; 
-            border-radius: 20px; font-size: 0.9rem; font-weight: 600; margin-bottom: 20px;
+            border-radius: 20px; font-size: 0.9rem; font-weight: 600; margin: 0 auto 20px; width: fit-content;
         }
 
-        .q-text { font-size: 1.8rem; color: var(--text-dark); margin-bottom: 30px; font-weight: 500; }
+        .q-text { font-size: 1.6rem; color: var(--text-dark); margin-bottom: 30px; font-weight: 500; line-height: 1.4; }
 
-        .answer-reveal {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            padding: 15px 30px;
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
             border-radius: 12px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 25px;
-            display: none;
-            animation: popIn 0.3s ease;
-            border: 2px dashed var(--primary);
+            padding: 15px 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 60px;
         }
 
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .quiz-actions { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
-
-        .btn {
-            padding: 12px 25px; border-radius: 50px; border: none; font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
         }
-        .btn-show { background: var(--text-dark); color: white; }
-        .btn-show:hover { background: #1a252f; }
-        
-        .btn-correct { background: var(--success); color: white; display: none; }
-        .btn-correct:hover { background: #27ae60; transform: scale(1.05); }
-        
-        .btn-wrong { background: var(--danger); color: white; display: none; }
-        .btn-wrong:hover { background: #c0392b; transform: scale(1.05); }
 
-        .btn-next { background: var(--primary); color: white; display: none; }
-        .btn-next:hover { background: var(--primary-dark); transform: scale(1.05); }
+        .option-btn.correct {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .option-btn.wrong {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+        }
+
+        .option-btn:disabled { cursor: default; opacity: 0.9; }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .action-btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-prev { background: #ecf0f1; color: var(--text-dark); }
+        .btn-prev:hover:not(:disabled) { background: #bdc3c7; }
+        .btn-prev:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-next { background: var(--primary); color: white; }
+        .btn-next:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
         /* VIEW 3: Result Screen */
         #result-container { display: none; text-align: center; animation: fadeInUp 0.5s ease; }
         .result-card {
-            background: var(--white); border-radius: 20px; padding: 40px; box-shadow: var(--shadow);
+            background: var(--white); border-radius: 20px; padding: 40px 30px; box-shadow: var(--shadow);
         }
-        .result-emoji { font-size: 4rem; margin-bottom: 15px; }
+        .result-emoji { font-size: 4rem; margin-bottom: 15px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
         .result-score { font-size: 2.5rem; font-weight: 700; color: var(--primary-dark); margin-bottom: 10px; }
-        .result-msg { font-size: 1.2rem; color: var(--text-light); margin-bottom: 30px; }
+        .result-msg { font-size: 1.1rem; color: var(--text-light); margin-bottom: 30px; line-height: 1.5; }
+
+        .result-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
 
         /* Animations */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
@@ -211,8 +236,9 @@
         @media (max-width: 600px) {
             .menu-header h1 { font-size: 1.8rem; }
             .q-text { font-size: 1.3rem; }
-            .quiz-actions { flex-direction: column; width: 100%; }
-            .btn { width: 100%; justify-content: center; }
+            .options-grid { grid-template-columns: 1fr; }
+            .quiz-actions { flex-direction: column-reverse; }
+            .action-btn { width: 100%; }
         }
     </style>
 </head>
@@ -220,8 +246,8 @@
 
     <div class="container">
         <div class="top-bar">
-            <a href="index.html" class="back-btn">← মূল মেনু</a>
-            <a href="index.html" class="home-btn">🏠 হোম</a>
+            <button class="nav-btn" onclick="exitQuiz()">← মূল মেনু</button>
+            <a href="index.html" class="nav-btn secondary">🏠 হোম</a>
         </div>
 
         <!-- VIEW 1: Topic Selection Menu -->
@@ -230,35 +256,33 @@
                 <h1>➕ যোগ (Addition)</h1>
                 <p>অনুশীলনের জন্য নিচ থেকে যেকোনো একটি টপিক সিলেক্ট করুন</p>
             </div>
-            <div class="topics-grid" id="topics-grid">
-                <!-- Topics will be injected here by JS -->
-            </div>
+            <div class="topics-grid" id="topics-grid"></div>
         </div>
 
         <!-- VIEW 2: Quiz Interface -->
         <div id="quiz-container">
             <div class="quiz-header">
-                <div>
+                <div class="quiz-header-top">
                     <div class="quiz-title" id="quiz-topic-title">টপিক নাম</div>
                     <div class="quiz-progress">প্রশ্ন <span id="current-q">1</span> / 5</div>
                 </div>
-                <button class="btn" style="background: #ecf0f1; color: var(--text-dark);" onclick="exitQuiz()">✕ বন্ধ করুন</button>
                 <div class="progress-bar-bg">
                     <div class="progress-bar-fill" id="quiz-progress-bar"></div>
                 </div>
             </div>
 
             <div class="quiz-card">
-                <div class="q-number" id="q-number-badge">প্রশ্ন ১</div>
-                <div class="q-text" id="q-text">Loading...</div>
-                
-                <div class="answer-reveal" id="answer-reveal"></div>
+                <div>
+                    <div class="q-number" id="q-number-badge">প্রশ্ন ১</div>
+                    <div class="q-text" id="q-text">Loading...</div>
+                    <div class="options-grid" id="options-grid">
+                        <!-- Options injected by JS -->
+                    </div>
+                </div>
 
                 <div class="quiz-actions">
-                    <button class="btn btn-show" id="btn-show" onclick="showAnswer()">👁 উত্তর দেখুন</button>
-                    <button class="btn btn-correct" id="btn-correct" onclick="markResult(true)">✅ আমি ঠিক করেছি</button>
-                    <button class="btn btn-wrong" id="btn-wrong" onclick="markResult(false)">❌ ভুল হয়েছে</button>
-                    <button class="btn btn-next" id="btn-next" onclick="nextQuestion()">পরবর্তী প্রশ্ন ➡️</button>
+                    <button class="action-btn btn-prev" id="btn-prev" onclick="prevQuestion()">⬅️ পূর্ববর্তী</button>
+                    <button class="action-btn btn-next" id="btn-next" onclick="nextQuestion()">পরবর্তী প্রশ্ন ➡️</button>
                 </div>
             </div>
         </div>
@@ -269,116 +293,115 @@
                 <div class="result-emoji" id="result-emoji">🎉</div>
                 <div class="result-score" id="result-score">5 / 5</div>
                 <div class="result-msg" id="result-msg">অসাধারণ! আপনি এই টপিকটি দারুণভাবে আয়ত্ত করেছেন।</div>
-                <div class="quiz-actions">
-                    <button class="btn btn-show" onclick="restartQuiz()">🔄 আবার চেষ্টা করুন</button>
-                    <button class="btn btn-next" style="display:flex;" onclick="exitQuiz()">📚 অন্য টপিক বাছাই করুন</button>
+                <div class="result-actions">
+                    <button class="action-btn btn-prev" onclick="restartQuiz()">🔄 আবার চেষ্টা করুন</button>
+                    <button class="action-btn btn-next" onclick="exitQuiz()">📚 অন্য টপিক বাছাই করুন</button>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // --- DATA: 10 Types, 5 Questions each ---
+        // --- DATA: 10 Types, 5 Questions each (with 4 options and correct index) ---
         const quizData = [
             {
                 id: 1, title: "পূর্ণসংখ্যার যোগ", desc: "ধনাত্মক ও ঋণাত্মক সংখ্যা",
                 questions: [
-                    { q: "$(+35) + (-12) = ?$", a: "$23$" },
-                    { q: "$(-84) + (-26) = ?$", a: "$-110$" },
-                    { q: "$(+105) + (+49) = ?$", a: "$154$" },
-                    { q: "$(-63) + (+91) = ?$", a: "$28$" },
-                    { q: "$(-210) + (+150) + (-40) = ?$", a: "$-100$" }
+                    { q: "$(+35) + (-12) = ?$", options: ["$23$", "$-23$", "$47$", "$-47$"], correct: 0 },
+                    { q: "$(-84) + (-26) = ?$", options: ["$-110$", "$110$", "$-58$", "$58$"], correct: 0 },
+                    { q: "$(+105) + (+49) = ?$", options: ["$154$", "$-154$", "$56$", "$-56$"], correct: 0 },
+                    { q: "$(-63) + (+91) = ?$", options: ["$28$", "$-28$", "$154$", "$-154$"], correct: 0 },
+                    { q: "$(-210) + (+150) + (-40) = ?$", options: ["$-100$", "$100$", "$-400$", "$0$"], correct: 0 }
                 ]
             },
             {
                 id: 2, title: "সাধারণ ভগ্নাংশের যোগ", desc: "ভিন্ন হর (Different Denominators)",
                 questions: [
-                    { q: "$\\frac{1}{2} + \\frac{1}{3} = ?$", a: "$\\frac{5}{6}$" },
-                    { q: "$\\frac{3}{5} + \\frac{7}{10} = ?$", a: "$\\frac{13}{10}$" },
-                    { q: "$\\frac{5}{6} + \\frac{3}{8} = ?$", a: "$\\frac{29}{24}$" },
-                    { q: "$\\frac{4}{9} + \\frac{5}{12} = ?$", a: "$\\frac{31}{36}$" },
-                    { q: "$\\frac{7}{15} + \\frac{11}{20} = ?$", a: "$\\frac{61}{60}$" }
+                    { q: "$\\frac{1}{2} + \\frac{1}{3} = ?$", options: ["$\\frac{5}{6}$", "$\\frac{2}{5}$", "$\\frac{1}{5}$", "$\\frac{2}{3}$"], correct: 0 },
+                    { q: "$\\frac{3}{5} + \\frac{7}{10} = ?$", options: ["$\\frac{13}{10}$", "$\\frac{10}{15}$", "$\\frac{1}{2}$", "$\\frac{11}{10}$"], correct: 0 },
+                    { q: "$\\frac{5}{6} + \\frac{3}{8} = ?$", options: ["$\\frac{29}{24}$", "$\\frac{8}{14}$", "$\\frac{15}{48}$", "$\\frac{2}{3}$"], correct: 0 },
+                    { q: "$\\frac{4}{9} + \\frac{5}{12} = ?$", options: ["$\\frac{31}{36}$", "$\\frac{9}{21}$", "$\\frac{20}{108}$", "$\\frac{1}{3}$"], correct: 0 },
+                    { q: "$\\frac{7}{15} + \\frac{11}{20} = ?$", options: ["$\\frac{61}{60}$", "$\\frac{18}{35}$", "$\\frac{77}{300}$", "$\\frac{1}{2}$"], correct: 0 }
                 ]
             },
             {
                 id: 3, title: "ঋণাত্মক ও ধনাত্মক ভগ্নাংশ", desc: "চিহ্নসহ ভগ্নাংশের যোগ",
                 questions: [
-                    { q: "$\\left(-\\frac{3}{4}\\right) + \\frac{1}{2} = ?$", a: "$-\\frac{1}{4}$" },
-                    { q: "$\\frac{5}{7} + \\left(-\\frac{2}{3}\\right) = ?$", a: "$\\frac{1}{21}$" },
-                    { q: "$\\left(-\\frac{7}{8}\\right) + \\left(-\\frac{1}{4}\\right) = ?$", a: "$-\\frac{9}{8}$" },
-                    { q: "$\\frac{9}{10} + \\left(-\\frac{3}{5}\\right) + \\frac{1}{2} = ?$", a: "$\\frac{4}{5}$" },
-                    { q: "$\\left(-\\frac{11}{12}\\right) + \\frac{5}{6} + \\left(-\\frac{1}{3}\\right) = ?$", a: "$-\\frac{5}{12}$" }
+                    { q: "$\\left(-\\frac{3}{4}\\right) + \\frac{1}{2} = ?$", options: ["$-\\frac{1}{4}$", "$\\frac{1}{4}$", "$-\\frac{5}{4}$", "$\\frac{1}{2}$"], correct: 0 },
+                    { q: "$\\frac{5}{7} + \\left(-\\frac{2}{3}\\right) = ?$", options: ["$\\frac{1}{21}$", "$-\\frac{1}{21}$", "$\\frac{7}{10}$", "$\\frac{3}{4}$"], correct: 0 },
+                    { q: "$\\left(-\\frac{7}{8}\\right) + \\left(-\\frac{1}{4}\\right) = ?$", options: ["$-\\frac{9}{8}$", "$\\frac{9}{8}$", "$-\\frac{6}{4}$", "$\\frac{5}{8}$"], correct: 0 },
+                    { q: "$\\frac{9}{10} + \\left(-\\frac{3}{5}\\right) + \\frac{1}{2} = ?$", options: ["$\\frac{4}{5}$", "$\\frac{2}{5}$", "$\\frac{7}{10}$", "$1$"], correct: 0 },
+                    { q: "$\\left(-\\frac{11}{12}\\right) + \\frac{5}{6} + \\left(-\\frac{1}{3}\\right) = ?$", options: ["$-\\frac{5}{12}$", "$\\frac{5}{12}$", "$-\\frac{1}{2}$", "$\\frac{1}{12}$"], correct: 0 }
                 ]
             },
             {
                 id: 4, title: "সাধারণ দশমিক সংখ্যার যোগ", desc: "Decimal Addition",
                 questions: [
-                    { q: "$18.4 + 6.25 = ?$", a: "$24.65$" },
-                    { q: "$35.02 + 4.8 + 12.356 = ?$", a: "$52.176$" },
-                    { q: "$105.5 + 0.075 + 14.2 = ?$", a: "$119.775$" },
-                    { q: "$0.333 + 0.667 + 5.1 = ?$", a: "$6.1$" },
-                    { q: "$78.9 + 21.05 + 3.002 + 0.4 = ?$", a: "$103.352$" }
+                    { q: "$18.4 + 6.25 = ?$", options: ["$24.65$", "$24.29$", "$12.15$", "$80.65$"], correct: 0 },
+                    { q: "$35.02 + 4.8 + 12.356 = ?$", options: ["$52.176$", "$51.176$", "$42.176$", "$52.376$"], correct: 0 },
+                    { q: "$105.5 + 0.075 + 14.2 = ?$", options: ["$119.775$", "$119.575$", "$109.775$", "$120.775$"], correct: 0 },
+                    { q: "$0.333 + 0.667 + 5.1 = ?$", options: ["$6.1$", "$6.0$", "$5.1$", "$6.11$"], correct: 0 },
+                    { q: "$78.9 + 21.05 + 3.002 + 0.4 = ?$", options: ["$103.352$", "$102.352$", "$103.452$", "$100.352$"], correct: 0 }
                 ]
             },
             {
                 id: 5, title: "ঋণাত্মক ও ধনাত্মক দশমিক", desc: "Signed Decimal Addition",
                 questions: [
-                    { q: "$(-14.5) + (+8.2) = ?$", a: "$-6.3$" },
-                    { q: "$(-25.75) + (-12.25) = ?$", a: "$-38$" },
-                    { q: "$(+64.3) + (-31.85) = ?$", a: "$32.45$" },
-                    { q: "$(-5.05) + (+12.4) + (-3.15) = ?$", a: "$4.2$" },
-                    { q: "$(+100.25) + (-45.5) + (-20.75) = ?$", a: "$34$" }
+                    { q: "$(-14.5) + (+8.2) = ?$", options: ["$-6.3$", "$6.3$", "$-22.7$", "$22.7$"], correct: 0 },
+                    { q: "$(-25.75) + (-12.25) = ?$", options: ["$-38$", "$38$", "$-13.5$", "$13.5$"], correct: 0 },
+                    { q: "$(+64.3) + (-31.85) = ?$", options: ["$32.45$", "$-32.45$", "$96.15$", "$33.45$"], correct: 0 },
+                    { q: "$(-5.05) + (+12.4) + (-3.15) = ?$", options: ["$4.2$", "$-4.2$", "$10.2$", "$20.6$"], correct: 0 },
+                    { q: "$(+100.25) + (-45.5) + (-20.75) = ?$", options: ["$34$", "$-34$", "$166.5$", "$74.5$"], correct: 0 }
                 ]
             },
             {
                 id: 6, title: "একচল বিশিষ্ট বীজগণিত", desc: "Single Variable (x) Expressions",
                 questions: [
-                    { q: "$(3x + 5) + (4x + 9) = ?$", a: "$7x + 14$" },
-                    { q: "$(-7x + 2) + (11x - 8) = ?$", a: "$4x - 6$" },
-                    { q: "$(15x - 12) + (-6x - 4) = ?$", a: "$9x - 16$" },
-                    { q: "$(8x + 3) + (-8x + 15) = ?$", a: "$18$" },
-                    { q: "$(2.5x + 4) + (1.5x - 7) = ?$", a: "$4x - 3$" }
+                    { q: "$(3x + 5) + (4x + 9) = ?$", options: ["$7x + 14$", "$12x + 45$", "$7x + 4$", "$12x + 14$"], correct: 0 },
+                    { q: "$(-7x + 2) + (11x - 8) = ?$", options: ["$4x - 6$", "$-4x + 6$", "$18x - 6$", "$-18x + 10$"], correct: 0 },
+                    { q: "$(15x - 12) + (-6x - 4) = ?$", options: ["$9x - 16$", "$21x - 8$", "$9x - 8$", "$21x - 16$"], correct: 0 },
+                    { q: "$(8x + 3) + (-8x + 15) = ?$", options: ["$18$", "$0$", "$16x + 18$", "$12$"], correct: 0 },
+                    { q: "$(2.5x + 4) + (1.5x - 7) = ?$", options: ["$4x - 3$", "$4x + 11$", "$3.75x - 3$", "$4x - 28$"], correct: 0 }
                 ]
             },
             {
                 id: 7, title: "ঘাতযুক্ত বীজগণিতীয় যোগ", desc: "Polynomials (x², x, constants)",
                 questions: [
-                    { q: "$(2x^2 + 3x + 1) + (x^2 + 5x + 4) = ?$", a: "$3x^2 + 8x + 5$" },
-                    { q: "$(5x^2 - 4x + 7) + (-2x^2 + x - 9) = ?$", a: "$3x^2 - 3x - 2$" },
-                    { q: "$(-3x^2 + 8x - 5) + (-x^2 - 3x + 12) = ?$", a: "$-4x^2 + 5x + 7$" },
-                    { q: "$(4x^2 - 10) + (3x^2 + 5x - 2) = ?$", a: "$7x^2 + 5x - 12$" },
-                    { q: "$(x^2 + x + 1) + (2x^2 - 2x - 2) + (-3x^2 + x + 1) = ?$", a: "$0$" }
+                    { q: "$(2x^2 + 3x + 1) + (x^2 + 5x + 4) = ?$", options: ["$3x^2 + 8x + 5$", "$2x^2 + 8x + 5$", "$3x^2 + 2x + 5$", "$3x^2 + 8x - 3$"], correct: 0 },
+                    { q: "$(5x^2 - 4x + 7) + (-2x^2 + x - 9) = ?$", options: ["$3x^2 - 3x - 2$", "$7x^2 - 3x - 2$", "$3x^2 - 5x + 16$", "$3x^2 + 3x + 2$"], correct: 0 },
+                    { q: "$(-3x^2 + 8x - 5) + (-x^2 - 3x + 12) = ?$", options: ["$-4x^2 + 5x + 7$", "$-4x^2 + 11x + 7$", "$-2x^2 + 5x + 7$", "$-4x^2 + 5x - 17$"], correct: 0 },
+                    { q: "$(4x^2 - 10) + (3x^2 + 5x - 2) = ?$", options: ["$7x^2 + 5x - 12$", "$7x^2 - 5x - 12$", "$12x^2 + 5x - 12$", "$7x^2 + 5x - 8$"], correct: 0 },
+                    { q: "$(x^2 + x + 1) + (2x^2 - 2x - 2) + (-3x^2 + x + 1) = ?$", options: ["$0$", "$2x^2$", "$2x$", "$1$"], correct: 0 }
                 ]
             },
             {
                 id: 8, title: "একাধিক চলবিশিষ্ট বীজগণিত", desc: "Multiple Variables (x, y)",
                 questions: [
-                    { q: "$(3x + 2y) + (5x + 4y) = ?$", a: "$8x + 6y$" },
-                    { q: "$(7x - 3y + 4) + (-2x + 5y - 9) = ?$", a: "$5x + 2y - 5$" },
-                    { q: "$(10x + 8y - 6) + (-10x - 8y + 6) = ?$", a: "$0$" },
-                    { q: "$(4x^2 + 2xy + y^2) + (x^2 - 3xy + 2y^2) = ?$", a: "$5x^2 - xy + 3y^2$" },
-                    { q: "$(-5x + 12y - 3) + (8x - 4y + 7) + (-2x - y) = ?$", a: "$x + 7y + 4$" }
+                    { q: "$(3x + 2y) + (5x + 4y) = ?$", options: ["$8x + 6y$", "$15x + 8y$", "$8x - 2y$", "$2x + 6y$"], correct: 0 },
+                    { q: "$(7x - 3y + 4) + (-2x + 5y - 9) = ?$", options: ["$5x + 2y - 5$", "$9x + 2y - 5$", "$5x - 8y + 13$", "$5x + 2y + 13$"], correct: 0 },
+                    { q: "$(10x + 8y - 6) + (-10x - 8y + 6) = ?$", options: ["$0$", "$20x + 16y - 12$", "$20x$", "$12$"], correct: 0 },
+                    { q: "$(4x^2 + 2xy + y^2) + (x^2 - 3xy + 2y^2) = ?$", options: ["$5x^2 - xy + 3y^2$", "$5x^2 + 5xy + 3y^2$", "$4x^2 - xy + 2y^2$", "$5x^2 - xy + y^2$"], correct: 0 },
+                    { q: "$(-5x + 12y - 3) + (8x - 4y + 7) + (-2x - y) = ?$", options: ["$x + 7y + 4$", "$x + 7y - 10$", "$15x + 7y + 4$", "$x + 17y + 4$"], correct: 0 }
                 ]
             },
             {
                 id: 9, title: "ভগ্নাংশযুক্ত বীজগণিত", desc: "Fractional Algebraic Expressions",
                 questions: [
-                    { q: "$\\frac{x}{2} + \\frac{x}{3} = ?$", a: "$\\frac{5x}{6}$" },
-                    { q: "$\\left(\\frac{2x}{3} + 1\\right) + \\left(\\frac{x}{4} - 3\\right) = ?$", a: "$\\frac{11x}{12} - 2$" },
-                    { q: "$\\left(\\frac{3x}{5} - \\frac{y}{2}\\right) + \\left(\\frac{x}{10} + \\frac{3y}{4}\\right) = ?$", a: "$\\frac{7x}{10} + \\frac{y}{4}$" },
-                    { q: "$\\left(\\frac{x^2}{2} + x\\right) + \\left(\\frac{x^2}{4} - \\frac{x}{3}\\right) = ?$", a: "$\\frac{3x^2}{4} + \\frac{2x}{3}$" },
-                    { q: "$\\left(-\\frac{5x}{6} + 2\\right) + \\left(\\frac{3x}{4} - \\frac{1}{2}\\right) = ?$", a: "$-\\frac{x}{12} + \\frac{3}{2}$" }
+                    { q: "$\\frac{x}{2} + \\frac{x}{3} = ?$", options: ["$\\frac{5x}{6}$", "$\\frac{2x}{5}$", "$\\frac{x}{6}$", "$x$"], correct: 0 },
+                    { q: "$\\left(\\frac{2x}{3} + 1\\right) + \\left(\\frac{x}{4} - 3\\right) = ?$", options: ["$\\frac{11x}{12} - 2$", "$\\frac{3x}{7} - 2$", "$\\frac{11x}{12} + 4$", "$\\frac{x}{12} - 2$"], correct: 0 },
+                    { q: "$\\left(\\frac{3x}{5} - \\frac{y}{2}\\right) + \\left(\\frac{x}{10} + \\frac{3y}{4}\\right) = ?$", options: ["$\\frac{7x}{10} + \\frac{y}{4}$", "$\\frac{4x}{15} + \\frac{y}{2}$", "$\\frac{7x}{10} - \\frac{y}{4}$", "$\\frac{x}{2} + \\frac{y}{4}$"], correct: 0 },
+                    { q: "$\\left(\\frac{x^2}{2} + x\\right) + \\left(\\frac{x^2}{4} - \\frac{x}{3}\\right) = ?$", options: ["$\\frac{3x^2}{4} + \\frac{2x}{3}$", "$\\frac{x^2}{2} + \\frac{2x}{3}$", "$\\frac{3x^2}{4} + \\frac{x}{3}$", "$\\frac{x^2}{8} + \\frac{2x}{3}$"], correct: 0 },
+                    { q: "$\\left(-\\frac{5x}{6} + 2\\right) + \\left(\\frac{3x}{4} - \\frac{1}{2}\\right) = ?$", options: ["$-\\frac{x}{12} + \\frac{3}{2}$", "$\\frac{x}{12} + \\frac{3}{2}$", "$-\\frac{x}{12} + \\frac{5}{2}$", "$-\\frac{2x}{10} + \\frac{3}{2}$"], correct: 0 }
                 ]
             },
             {
                 id: 10, title: "মিশ্র যোগ", desc: "Mixed (Integer + Fraction + Decimal + Variable)",
                 questions: [
-                    { q: "$15 + \\frac{1}{2} + 3.5 = ?$", a: "$19$" },
-                    { q: "$(-20) + \\frac{3}{4} + 12.25 + 2x = ?$", a: "$2x - 7$" },
-                    { q: "$(3.5x + 10) + \\left(\\frac{x}{2} - 4\\right) + (-5) = ?$", a: "$4x + 1$" },
-                    { q: "$\\left(-\\frac{7}{2}\\right) + 1.5 + 5x + (-2x) = ?$", a: "$3x - 2$" },
-                    { q: "$100 + (-25.5) + \\left(-\\frac{3}{4}\\right) + 4x + x^2 = ?$", a: "$x^2 + 4x + 73.75$" }
+                    { q: "$15 + \\frac{1}{2} + 3.5 = ?$", options: ["$19$", "$18.5$", "$19.5$", "$20$"], correct: 0 },
+                    { q: "$(-20) + \\frac{3}{4} + 12.25 + 2x = ?$", options: ["$2x - 7$", "$2x + 7$", "$2x - 32$", "$2x + 32$"], correct: 0 },
+                    { q: "$(3.5x + 10) + \\left(\\frac{x}{2} - 4\\right) + (-5) = ?$", options: ["$4x + 1$", "$4x - 1$", "$3x + 1$", "$4x + 19$"], correct: 0 },
+                    { q: "$\\left(-\\frac{7}{2}\\right) + 1.5 + 5x + (-2x) = ?$", options: ["$3x - 2$", "$3x + 2$", "$-3x - 2$", "$3x - 5$"], correct: 0 },
+                    { q: "$100 + (-25.5) + \\left(-\\frac{3}{4}\\right) + 4x + x^2 = ?$", options: ["$x^2 + 4x + 73.75$", "$x^2 + 4x + 74.25$", "$x^2 + 4x + 124.75$", "$x^2 + 4x - 73.75$"], correct: 0 }
                 ]
             }
         ];
@@ -386,7 +409,8 @@
         // --- STATE VARIABLES ---
         let currentTopicIndex = 0;
         let currentQuestionIndex = 0;
-        let score = 0;
+        let userAnswers = []; // Stores user's selected option index for each question
+        let shuffledQuestions = []; // Stores shuffled options for current topic
 
         // --- INITIALIZATION ---
         window.addEventListener('load', () => {
@@ -414,11 +438,31 @@
         }
 
         // --- QUIZ LOGIC ---
+        function shuffleOptions(question) {
+            // Create array of objects with original index to track correct answer
+            let opts = question.options.map((opt, i) => ({ 
+                text: opt, 
+                isCorrect: i === question.correct 
+            }));
+            // Fisher-Yates shuffle
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+            return opts;
+        }
+
         function startQuiz(index) {
             currentTopicIndex = index;
             currentQuestionIndex = 0;
-            score = 0;
+            userAnswers = new Array(5).fill(null);
             
+            // Pre-shuffle all questions for this topic
+            shuffledQuestions = quizData[index].questions.map(q => ({
+                q: q.q,
+                options: shuffleOptions(q)
+            }));
+
             document.getElementById('topic-menu').style.display = 'none';
             document.getElementById('result-container').style.display = 'none';
             document.getElementById('quiz-container').style.display = 'block';
@@ -428,66 +472,112 @@
         }
 
         function loadQuestion() {
-            const topic = quizData[currentTopicIndex];
-            const q = topic.questions[currentQuestionIndex];
+            const q = shuffledQuestions[currentQuestionIndex];
             
-            // Update UI
+            // Update UI Text
             document.getElementById('current-q').innerText = currentQuestionIndex + 1;
             document.getElementById('q-number-badge').innerText = `প্রশ্ন ${currentQuestionIndex + 1}`;
             document.getElementById('q-text').innerHTML = q.q;
             
-            // Reset buttons and answer
-            document.getElementById('answer-reveal').style.display = 'none';
-            document.getElementById('answer-reveal').innerHTML = q.a;
-            
-            document.getElementById('btn-show').style.display = 'flex';
-            document.getElementById('btn-correct').style.display = 'none';
-            document.getElementById('btn-wrong').style.display = 'none';
-            document.getElementById('btn-next').style.display = 'none';
-
-            // Update progress bar
+            // Update Progress Bar
             const progress = ((currentQuestionIndex) / 5) * 100;
             document.getElementById('quiz-progress-bar').style.width = progress + '%';
+
+            // Render Options
+            const optionsGrid = document.getElementById('options-grid');
+            optionsGrid.innerHTML = '';
+            
+            const labels = ['ক', 'খ', 'গ', 'ঘ'];
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span style="margin-right:8px; opacity:0.6;">${labels[idx]}.</span> ${opt.text}`;
+                
+                // If already answered, show state
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    btn.disabled = true;
+                    if (opt.isCorrect) {
+                        btn.classList.add('correct');
+                    } else if (idx === userAnswers[currentQuestionIndex]) {
+                        btn.classList.add('wrong');
+                    }
+                } else {
+                    btn.onclick = () => selectOption(idx);
+                }
+                
+                optionsGrid.appendChild(btn);
+            });
+
+            // Update Navigation Buttons
+            const prevBtn = document.getElementById('btn-prev');
+            const nextBtn = document.getElementById('btn-next');
+            
+            prevBtn.style.display = currentQuestionIndex === 0 ? 'none' : 'flex';
+            
+            if (currentQuestionIndex === 4) {
+                nextBtn.innerText = userAnswers[4] !== null ? '🏆 ফলাফল দেখুন' : 'উত্তর দিয়ে ফলাফল দেখুন';
+                nextBtn.disabled = userAnswers[4] === null;
+            } else {
+                nextBtn.innerText = 'পরবর্তী প্রশ্ন ➡️';
+                nextBtn.disabled = false;
+            }
 
             // Re-render math
             if (window.renderMathInElement) {
                 renderMathInElement(document.getElementById('q-text'), {delimiters: [{left: '$', right: '$', display: false}]});
-                renderMathInElement(document.getElementById('answer-reveal'), {delimiters: [{left: '$', right: '$', display: false}]});
+                renderMathInElement(optionsGrid, {delimiters: [{left: '$', right: '$', display: false}]});
             }
         }
 
-        function showAnswer() {
-            document.getElementById('answer-reveal').style.display = 'block';
-            document.getElementById('btn-show').style.display = 'none';
-            document.getElementById('btn-correct').style.display = 'flex';
-            document.getElementById('btn-wrong').style.display = 'flex';
-        }
+        function selectOption(selectedIdx) {
+            userAnswers[currentQuestionIndex] = selectedIdx;
+            
+            // Update UI immediately
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (shuffledQuestions[currentQuestionIndex].options[idx].isCorrect) {
+                    btn.classList.add('correct');
+                } else if (idx === selectedIdx) {
+                    btn.classList.add('wrong');
+                }
+            });
 
-        function markResult(isCorrect) {
-            if (isCorrect) score++;
-            
-            document.getElementById('btn-correct').style.display = 'none';
-            document.getElementById('btn-wrong').style.display = 'none';
-            
-            if (currentQuestionIndex < 4) {
-                document.getElementById('btn-next').style.display = 'flex';
-            } else {
-                // Last question, show finish button
-                const nextBtn = document.getElementById('btn-next');
+            // Enable Next button
+            const nextBtn = document.getElementById('btn-next');
+            if (currentQuestionIndex === 4) {
                 nextBtn.innerText = '🏆 ফলাফল দেখুন';
-                nextBtn.style.display = 'flex';
-                nextBtn.onclick = showResult;
             }
+            nextBtn.disabled = false;
         }
 
         function nextQuestion() {
-            currentQuestionIndex++;
-            loadQuestion();
+            if (currentQuestionIndex < 4) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
         }
 
         function showResult() {
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('result-container').style.display = 'block';
+            
+            // Calculate score
+            let score = 0;
+            userAnswers.forEach((ansIdx, qIdx) => {
+                if (ansIdx !== null && shuffledQuestions[qIdx].options[ansIdx].isCorrect) {
+                    score++;
+                }
+            });
             
             document.getElementById('result-score').innerText = `${score} / 5`;
             
@@ -496,7 +586,7 @@
             
             if (score === 5) {
                 emoji.innerText = '🏆';
-                msg.innerText = 'অসাধারণ! আপনি এই টপিকটি ১০০% আয়ত্ত করেছেন।';
+                msg.innerText = 'অসাধারণ! আপনি এই টপিকটি ১০০% নিখুঁতভাবে আয়ত্ত করেছেন।';
             } else if (score >= 3) {
                 emoji.innerText = '👏';
                 msg.innerText = 'ভালো হয়েছে! আরও একটু প্র্যাকটিস করলেই পারফেক্ট হয়ে যাবে।';
@@ -514,11 +604,6 @@
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('result-container').style.display = 'none';
             document.getElementById('topic-menu').style.display = 'block';
-            
-            // Reset next button text for next time
-            const nextBtn = document.getElementById('btn-next');
-            nextBtn.innerText = 'পরবর্তী প্রশ্ন ➡️';
-            nextBtn.onclick = nextQuestion;
         }
     </script>
 </body>
