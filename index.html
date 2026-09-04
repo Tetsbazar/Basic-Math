@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Basic - গণিতের মৌলিক ধারণা</title>
+    
+    <!-- বাংলা ফন্ট -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Floating Math Symbols Background */
+        .bg-symbols {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .bg-symbols span {
+            position: absolute;
+            font-size: 4rem;
+            color: white;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Header Section */
+        .header {
+            margin-bottom: 50px;
+            color: white;
+            animation: fadeInDown 1s ease;
+        }
+
+        .header .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        /* Buttons Grid */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .card-btn {
+            position: relative;
+            background: white;
+            border: none;
+            border-radius: 20px;
+            padding: 40px 25px;
+            text-decoration: none;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+        }
+
+        .card-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--accent-color);
+            transition: height 0.3s ease;
+        }
+
+        .card-btn:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+        .card-btn:hover::before {
+            height: 100%;
+            opacity: 0.1;
+        }
+
+        .card-btn .symbol {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-btn:hover .symbol {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .card-btn .title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .card-btn .subtitle {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            font-weight: 400;
+        }
+
+        .card-btn .arrow {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .card-btn:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Individual Card Colors */
+        .card-jog { --accent-color: #27ae60; }
+        .card-biyog { --accent-color: #e74c3c; }
+        .card-gun { --accent-color: #3498db; }
+        .card-vag { --accent-color: #f39c12; }
+        .card-patiganit { --accent-color: #9b59b6; }
+
+        /* Footer */
+        .footer {
+            color: white;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 20px;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .footer .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            margin-top: 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .header p { font-size: 1rem; }
+            .header .icon { font-size: 3rem; }
+            .buttons-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 15px; }
+            .card-btn { padding: 30px 15px; min-height: 180px; }
+            .card-btn .symbol { font-size: 3rem; }
+            .card-btn .title { font-size: 1.2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .buttons-grid { grid-template-columns: 1fr 1fr; }
+            .card-btn:last-child { grid-column: span 2; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Floating Symbols -->
+    <div class="bg-symbols">
+        <span style="left: 5%; animation-delay: 0s;">+</span>
+        <span style="left: 20%; animation-delay: 3s;">−</span>
+        <span style="left: 35%; animation-delay: 6s;">×</span>
+        <span style="left: 50%; animation-delay: 9s;">÷</span>
+        <span style="left: 65%; animation-delay: 2s;">=</span>
+        <span style="left: 80%; animation-delay: 5s;">∑</span>
+        <span style="left: 92%; animation-delay: 8s;">π</span>
+    </div>
+
+    <div class="container">
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="icon">🧮</div>
+            <h1>Math Basic</h1>
+            <p>গণিতের মৌলিক ধারণা — ভিত থেকে শুরু করুন শেখা</p>
+        </div>
+
+        <!-- Buttons Grid -->
+        <div class="buttons-grid">
+            
+            <!-- যোগ -->
+            <a href="jog.html" class="card-btn card-jog">
+                <div class="symbol">+</div>
+                <div class="title">যোগ</div>
+                <div class="subtitle">Addition</div>
+                <div class="arrow">→</div>
+            </a>
+
+            <!-- বিয়োগ -->
+            <a href="biyog.html" class="card-btn card-biyog">
+                <div class="symbol">−</div>
+                <div class="title">বিয়োগ</div>
+                <div class="subtitle">Subtraction</div>
+                <div class="arrow">→</div>
+            </a>
+
+            <!-- গুণ -->
+            <a href="gun.html" class="card-btn card-gun">
+                <div class="symbol">×</div>
+                <div class="title">গুণ</div>
+                <div class="subtitle">Multiplication</div>
+                <div class="arrow">→</div>
+            </a>
+
+            <!-- ভাগ -->
+            <a href="vag.html" class="card-btn card-vag">
+                <div class="symbol">÷</div>
+                <div class="title">ভাগ</div>
+                <div class="subtitle">Division</div>
+                <div class="arrow">→</div>
+            </a>
+
+            <!-- পাটিগণিত -->
+            <a href="patiganit.html" class="card-btn card-patiganit">
+                <div class="symbol">∑</div>
+                <div class="title">পাটিগণিত</div>
+                <div class="subtitle">Arithmetic</div>
+                <div class="arrow">→</div>
+            </a>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>📚 প্রতিটি টপিকে ৫০টি করে অঙ্কের প্র্যাকটিস রয়েছে</p>
+            <div class="badge">✨ শেখা শুরু করুন আজই ✨</div>
+        </div>
+
+    </div>
+
+</body>
+</html>
