@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>যোগ (Addition) - Math Basic</title>
+    
+    <!-- বাংলা ফন্ট -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false}
+            ]
+        });"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #1e8449;
+            --primary-light: #d5f4e6;
+            --bg-gradient: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --card-bg: #ffffff;
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8e6cf 0%, #27ae60 100%);
+            padding: 20px;
+            color: var(--text-dark);
+        }
+
+        /* Top Navigation Bar */
+        .top-bar {
+            max-width: 1100px;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            color: var(--primary-dark);
+            padding: 10px 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: white;
+            color: var(--primary-dark);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Header */
+        .header {
+            max-width: 1100px;
+            margin: 0 auto 30px;
+            text-align: center;
+            color: white;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .header .icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            max-width: 1100px;
+            margin: 0 auto 30px;
+            background: white;
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .progress-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1rem;
+        }
+
+        .progress-count {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--bg-gradient);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        /* Sections */
+        .sections-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            padding-bottom: 40px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.6s ease both;
+            border-top: 5px solid var(--primary);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #ecf0f1;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-number {
+            background: var(--bg-gradient);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .section-title h2 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .section-title .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .toggle-all-btn {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-all-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Problems */
+        .problems-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .problem {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .problem:hover {
+            background: var(--primary-light);
+            transform: translateX(5px);
+        }
+
+        .problem-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .problem-num {
+            background: white;
+            color: var(--primary-dark);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            border: 2px solid var(--primary);
+        }
+
+        .problem-question {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .problem-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .answer-box {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 2px dashed #bdc3c7;
+            min-width: 100px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-dark);
+            display: none;
+        }
+
+        .answer-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .check-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .check-btn.checked {
+            background: #2ecc71;
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            max-width: 1100px;
+            margin: 40px auto 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .nav-card {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-3px);
+            background: var(--primary);
+            color: white;
+        }
+
+        .footer-text {
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            font-size: 0.95rem;
+            opacity: 0.9;
+            padding-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .top-bar, .action-btns, .check-btn, .toggle-all-btn, .footer-nav, .answer-box {
+                display: none !important;
+            }
+            .section {
+                box-shadow: none;
+                page-break-inside: avoid;
+                border: 1px solid #ddd;
+            }
+            .header { color: var(--primary-dark); }
+            .header h1 { text-shadow: none; }
+            .progress-container { display: none; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .section { padding: 20px; }
+            .section-title h2 { font-size: 1.1rem; }
+            .problem { padding: 12px 15px; }
+            .problem-question { font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .problem-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .problem-right { width: 100%; justify-content: flex-end; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <a href="index.html" class="back-btn">
+            ← হোম
+        </a>
+        <div class="action-btns">
+            <button class="action-btn" onclick="toggleAllAnswers()">
+                👁 সব উত্তর দেখুন
+            </button>
+            <button class="action-btn" onclick="resetProgress()">
+                🔄 রিসেট
+            </button>
+            <button class="action-btn" onclick="window.print()">
+                🖨 প্রিন্ট / PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="icon">➕</div>
+        <h1>যোগ (Addition)</h1>
+        <p>১০টি ভিন্ন ক্যাটাগরিতে মোট ৫০টি অঙ্ক — ভিত মজবুত করুন</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-header">
+            <div class="progress-title">📊 আপনার অগ্রগতি</div>
+            <div class="progress-count"><span id="completedCount">0</span> / 50 সম্পন্ন</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- Sections Container -->
+    <div class="sections-container">
+
+        <!-- TYPE 1: পূর্ণসংখ্যার যোগ -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">১</div>
+                    <div>
+                        <h2>পূর্ণসংখ্যার যোগ</h2>
+                        <div class="subtitle">ধনাত্মক ও ঋণাত্মক সংখ্যা</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$(+35) + (-12) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$23$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$(-84) + (-26) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-110$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$(+105) + (+49) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$154$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$(-63) + (+91) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$28$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$(-210) + (+150) + (-40) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-100$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 2: সাধারণ ভগ্নাংশের যোগ -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">২</div>
+                    <div>
+                        <h2>সাধারণ ভগ্নাংশের যোগ</h2>
+                        <div class="subtitle">ভিন্ন হর (Different Denominators)</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$\frac{1}{2} + \frac{1}{3} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{5}{6}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$\frac{3}{5} + \frac{7}{10} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{13}{10}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$\frac{5}{6} + \frac{3}{8} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{29}{24}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$\frac{4}{9} + \frac{5}{12} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{31}{36}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$\frac{7}{15} + \frac{11}{20} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{61}{60}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 3: ঋণাত্মক ও ধনাত্মক ভগ্নাংশ -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৩</div>
+                    <div>
+                        <h2>ঋণাত্মক ও ধনাত্মক ভগ্নাংশ</h2>
+                        <div class="subtitle">চিহ্নসহ ভগ্নাংশের যোগ</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$\left(-\frac{3}{4}\right) + \frac{1}{2} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-\frac{1}{4}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$\frac{5}{7} + \left(-\frac{2}{3}\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{1}{21}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$\left(-\frac{7}{8}\right) + \left(-\frac{1}{4}\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-\frac{9}{8}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$\frac{9}{10} + \left(-\frac{3}{5}\right) + \frac{1}{2} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{4}{5}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$\left(-\frac{11}{12}\right) + \frac{5}{6} + \left(-\frac{1}{3}\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-\frac{5}{12}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 4: দশমিক সংখ্যার যোগ -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৪</div>
+                    <div>
+                        <h2>সাধারণ দশমিক সংখ্যার যোগ</h2>
+                        <div class="subtitle">Decimal Addition</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$18.4 + 6.25 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$24.65$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$35.02 + 4.8 + 12.356 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$52.176$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$105.5 + 0.075 + 14.2 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$119.775$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$0.333 + 0.667 + 5.1 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$6.1$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$78.9 + 21.05 + 3.002 + 0.4 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$103.352$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 5: ঋণাত্মক দশমিক -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৫</div>
+                    <div>
+                        <h2>ঋণাত্মক ও ধনাত্মক দশমিক</h2>
+                        <div class="subtitle">Signed Decimal Addition</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$(-14.5) + (+8.2) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-6.3$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$(-25.75) + (-12.25) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-38$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$(+64.3) + (-31.85) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$32.45$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$(-5.05) + (+12.4) + (-3.15) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$4.2$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$(+100.25) + (-45.5) + (-20.75) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$34$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 6: একচল বীজগণিত -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৬</div>
+                    <div>
+                        <h2>একচল বিশিষ্ট বীজগণিতীয় যোগ</h2>
+                        <div class="subtitle">Single Variable (x) Expressions</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$(3x + 5) + (4x + 9) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$7x + 14$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$(-7x + 2) + (11x - 8) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$4x - 6$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$(15x - 12) + (-6x - 4) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$9x - 16$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$(8x + 3) + (-8x + 15) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$18$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$(2.5x + 4) + (1.5x - 7) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$4x - 3$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 7: ঘাতযুক্ত বীজগণিত -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৭</div>
+                    <div>
+                        <h2>ঘাতযুক্ত বীজগণিতীয় যোগ</h2>
+                        <div class="subtitle">Polynomials (x², x, constants)</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$(2x^2 + 3x + 1) + (x^2 + 5x + 4) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$3x^2 + 8x + 5$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$(5x^2 - 4x + 7) + (-2x^2 + x - 9) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$3x^2 - 3x - 2$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$(-3x^2 + 8x - 5) + (-x^2 - 3x + 12) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-4x^2 + 5x + 7$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$(4x^2 - 10) + (3x^2 + 5x - 2) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$7x^2 + 5x - 12$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$(x^2 + x + 1) + (2x^2 - 2x - 2) + (-3x^2 + x + 1) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$0$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 8: একাধিক চলক -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৮</div>
+                    <div>
+                        <h2>একাধিক চলবিশিষ্ট বীজগণিত</h2>
+                        <div class="subtitle">Multiple Variables (x, y)</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$(3x + 2y) + (5x + 4y) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$8x + 6y$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$(7x - 3y + 4) + (-2x + 5y - 9) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$5x + 2y - 5$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$(10x + 8y - 6) + (-10x - 8y + 6) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$0$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$(4x^2 + 2xy + y^2) + (x^2 - 3xy + 2y^2) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$5x^2 - xy + 3y^2$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$(-5x + 12y - 3) + (8x - 4y + 7) + (-2x - y) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$x + 7y + 4$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 9: ভগ্নাংশযুক্ত বীজগণিত -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">৯</div>
+                    <div>
+                        <h2>ভগ্নাংশযুক্ত বীজগণিতীয় যোগ</h2>
+                        <div class="subtitle">Fractional Algebraic Expressions</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$\frac{x}{2} + \frac{x}{3} = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{5x}{6}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$\left(\frac{2x}{3} + 1\right) + \left(\frac{x}{4} - 3\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{11x}{12} - 2$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$\left(\frac{3x}{5} - \frac{y}{2}\right) + \left(\frac{x}{10} + \frac{3y}{4}\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{7x}{10} + \frac{y}{4}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$\left(\frac{x^2}{2} + x\right) + \left(\frac{x^2}{4} - \frac{x}{3}\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$\frac{3x^2}{4} + \frac{2x}{3}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$\left(-\frac{5x}{6} + 2\right) + \left(\frac{3x}{4} - \frac{1}{2}\right) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$-\frac{x}{12} + \frac{3}{2}$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TYPE 10: মিশ্র যোগ -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-number">১০</div>
+                    <div>
+                        <h2>মিশ্র যোগ</h2>
+                        <div class="subtitle">Mixed (Integer + Fraction + Decimal + Variable)</div>
+                    </div>
+                </div>
+                <button class="toggle-all-btn" onclick="toggleSection(this)">উত্তর দেখুন</button>
+            </div>
+            <div class="problems-list">
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">১</div>
+                        <div class="problem-question">$15 + \frac{1}{2} + 3.5 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$19$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">২</div>
+                        <div class="problem-question">$(-20) + \frac{3}{4} + 12.25 + 2x = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$2x - 7$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৩</div>
+                        <div class="problem-question">$(3.5x + 10) + \left(\frac{x}{2} - 4\right) + (-5) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$4x + 1$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৪</div>
+                        <div class="problem-question">$\left(-\frac{7}{2}\right) + 1.5 + 5x + (-2x) = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$3x - 2$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+                <div class="problem">
+                    <div class="problem-left">
+                        <div class="problem-num">৫</div>
+                        <div class="problem-question">$100 + (-25.5) + \left(-\frac{3}{4}\right) + 4x + x^2 = ?$</div>
+                    </div>
+                    <div class="problem-right">
+                        <div class="answer-box">$x^2 + 4x + 73.75$</div>
+                        <button class="check-btn" onclick="markDone(this)">✓</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Navigation -->
+    <div class="footer-nav">
+        <a href="index.html" class="nav-card">
+            🏠 হোমে ফিরুন
+        </a>
+        <a href="biyog.html" class="nav-card" style="opacity: 0.6;">
+            ➡️ পরবর্তী: বিয়োগ (শীঘ্রই আসছে)
+        </a>
+    </div>
+
+    <div class="footer-text">
+        📘 Math Basic — যোগ (Addition) | মোট ৫০টি অঙ্ক
+    </div>
+
+    <script>
+        // Toggle individual answer
+        function toggleAnswer(btn) {
+            const answerBox = btn.parentElement.querySelector('.answer-box');
+            answerBox.classList.toggle('show');
+        }
+
+        // Toggle all answers in a section
+        function toggleSection(btn) {
+            const section = btn.closest('.section');
+            const answers = section.querySelectorAll('.answer-box');
+            const isShowing = btn.textContent.includes('লুকান');
+            
+            answers.forEach(answer => {
+                if (isShowing) {
+                    answer.classList.remove('show');
+                } else {
+                    answer.classList.add('show');
+                }
+            });
+            
+            btn.textContent = isShowing ? 'উত্তর দেখুন' : 'উত্তর লুকান';
+        }
+
+        // Toggle all answers globally
+        function toggleAllAnswers() {
+            const allAnswers = document.querySelectorAll('.answer-box');
+            const anyVisible = Array.from(allAnswers).some(a => a.classList.contains('show'));
+            
+            allAnswers.forEach(answer => {
+                if (anyVisible) {
+                    answer.classList.remove('show');
+                } else {
+                    answer.classList.add('show');
+                }
+            });
+
+            // Update section buttons
+            document.querySelectorAll('.toggle-all-btn').forEach(btn => {
+                btn.textContent = anyVisible ? 'উত্তর দেখুন' : 'উত্তর লুকান';
+            });
+        }
+
+        // Mark problem as done
+        function markDone(btn) {
+            btn.classList.toggle('checked');
+            updateProgress();
+            saveProgress();
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const total = document.querySelectorAll('.check-btn').length;
+            const completed = document.querySelectorAll('.check-btn.checked').length;
+            const percentage = (completed / total) * 100;
+            
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('completedCount').textContent = completed;
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            const buttons = document.querySelectorAll('.check-btn');
+            const states = Array.from(buttons).map(btn => btn.classList.contains('checked'));
+            localStorage.setItem('mathJogProgress', JSON.stringify(states));
+        }
+
+        // Load progress from localStorage
+        function loadProgress() {
+            const saved = localStorage.getItem('mathJogProgress');
+            if (saved) {
+                const states = JSON.parse(saved);
+                const buttons = document.querySelectorAll('.check-btn');
+                buttons.forEach((btn, index) => {
+                    if (states[index]) btn.classList.add('checked');
+                });
+                updateProgress();
+            }
+        }
+
+        // Reset progress
+        function resetProgress() {
+            if (confirm('আপনি কি নিশ্চিত সব অগ্রগতি রিসেট করতে চান?')) {
+                document.querySelectorAll('.check-btn').forEach(btn => {
+                    btn.classList.remove('checked');
+                });
+                document.querySelectorAll('.answer-box').forEach(box => {
+                    box.classList.remove('show');
+                });
+                document.querySelectorAll('.toggle-all-btn').forEach(btn => {
+                    btn.textContent = 'উত্তর দেখুন';
+                });
+                localStorage.removeItem('mathJogProgress');
+                updateProgress();
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            loadProgress();
+            // Stagger animation for sections
+            document.querySelectorAll('.section').forEach((section, index) => {
+                section.style.animationDelay = (0.1 * index) + 's';
+            });
+        });
+    </script>
+
+</body>
+</html>
